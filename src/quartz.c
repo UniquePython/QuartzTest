@@ -1,6 +1,5 @@
 #include "quartz.h"
 
-#include <stdbool.h>
 #include <stdlib.h>
 
 typedef struct quartz_location_t
@@ -36,5 +35,15 @@ void quartzTestResultFree(QuartzTestResult **quartzTestResult)
     {
         free(*quartzTestResult);
         *quartzTestResult = NULL;
+    }
+}
+
+void quartzAssert(bool cond, QuartzTestResult *result, const char *file, const char *func, unsigned int line, const char *expr)
+{
+    if (result && cond == false && result->pass != false)
+    {
+        result->pass = cond;
+        result->loc = (QuartzLocation){file, func, line};
+        result->expr = expr;
     }
 }
